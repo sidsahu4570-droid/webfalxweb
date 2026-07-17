@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /includes/
+Disallow: /database/
+Disallow: /logs/
+
+Sitemap: sitemap.php
