@@ -91,10 +91,6 @@ $seo = get_seo_data($page_seo ?? []);
 </head>
 <body>
 
-    <!-- 1. Custom Interactive Cursors -->
-    <div class="custom-cursor-dot"></div>
-    <div class="custom-cursor-outline"></div>
-
     <!-- 2. Premium Page Loader -->
     <div class="page-loader">
         <div class="loader-inner">

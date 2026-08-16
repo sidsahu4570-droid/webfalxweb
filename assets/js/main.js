@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPageLoader();
     initMobileNav();
     initScrollEffects();
-    initCustomCursor();
     initGlowCards();
     initTypingAnimation();
     initFaqAccordion();
@@ -126,63 +125,6 @@ function initScrollEffects() {
             });
         });
     }
-}
-
-/**
- * 4. Dual Custom Cursor (Dot and Outer ring with inertia)
- */
-function initCustomCursor() {
-    const dot = document.querySelector('.custom-cursor-dot');
-    const outline = document.querySelector('.custom-cursor-outline');
-    
-    if (!dot || !outline) return;
-
-    if (window.matchMedia("(pointer: fine)").matches) {
-        document.body.style.cursor = 'none';
-        dot.style.opacity = '1';
-        outline.style.opacity = '1';
-    } else {
-        dot.style.display = 'none';
-        outline.style.display = 'none';
-        return;
-    }
-
-    let mouseX = 0, mouseY = 0;
-    let outlineX = 0, outlineY = 0;
-    const speed = 0.15;
-
-    document.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-        
-        dot.style.left = mouseX + 'px';
-        dot.style.top = mouseY + 'px';
-    });
-
-    function animateOutline() {
-        outlineX += (mouseX - outlineX) * speed;
-        outlineY += (mouseY - outlineY) * speed;
-
-        outline.style.left = outlineX + 'px';
-        outline.style.top = outlineY + 'px';
-
-        requestAnimationFrame(animateOutline);
-    }
-    requestAnimationFrame(animateOutline);
-
-    const updateHoverables = () => {
-        const hoverables = document.querySelectorAll('a, button, .btn, .faq-header, .interactive-card, input, textarea, select, .lightbox-trigger, .form-tab-btn');
-        hoverables.forEach(item => {
-            item.addEventListener('mouseenter', () => {
-                document.body.classList.add('cursor-hover');
-            });
-            item.addEventListener('mouseleave', () => {
-                document.body.classList.remove('cursor-hover');
-            });
-        });
-    };
-    updateHoverables();
-    setInterval(updateHoverables, 2000);
 }
 
 /**
