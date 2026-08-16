@@ -117,8 +117,9 @@ function verify_csrf_token(?string $token): bool {
 function require_csrf_token() {
     $token = $_POST['csrf_token'] ?? $_GET['csrf_token'] ?? $_SERVER['HTTP_X_CSRF_TOKEN'] ?? null;
     if (!verify_csrf_token($token)) {
-        http_response_code(403);
-        die('Forbidden: CSRF token validation failed.');
+        // Clear old token so a fresh one is generated on the next page load
+        unset($_SESSION['csrf_token']);
+        throw new InvalidArgumentException('CSRF token validation failed. Please refresh the page and try again.');
     }
 }
 
@@ -169,18 +170,18 @@ function get_setting(string $key, string $default = ''): string {
 /**
  * Fetches a content block from the database.
  */
-function get_content_block(string $key): ?array {
+function get_content_block(string $key, ?array $default = null): ?array {
     global $db;
     if (!$db) {
-        return null;
+        return $default;
     }
     try {
         $stmt = $db->prepare("SELECT title, subtitle, content, image_url, link_url FROM content_blocks WHERE block_key = :key LIMIT 1");
         $stmt->execute(['key' => $key]);
-        return $stmt->fetch() ?: null;
+        return $stmt->fetch() ?: $default;
     } catch (PDOException $e) {
         error_log("Failed to fetch content block '$key': " . $e->getMessage());
-        return null;
+        return $default;
     }
 }
 

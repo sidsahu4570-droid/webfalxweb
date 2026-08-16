@@ -90,7 +90,7 @@ require_once __DIR__ . '/functions.php';
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
     <!-- Custom Client Application Engines -->
-    <script src="<?php echo BASE_URL; ?>assets/js/main.js"></script>
-    <script src="<?php echo BASE_URL; ?>assets/js/animations.js"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/main.js?v=1.0.2"></script>
+    <script src="<?php echo BASE_URL; ?>assets/js/animations.js?v=1.0.2"></script>
 </body>
 </html>

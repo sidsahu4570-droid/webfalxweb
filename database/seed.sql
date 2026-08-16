@@ -2,7 +2,7 @@
 
 -- 1. Default Admin
 INSERT INTO `admins` (`id`, `username`, `password_hash`, `email`, `role`, `status`) VALUES
-(1, 'admin', '$2y$12$Lt69ArDmfaiPcYzZFlCy4uePQ0ZjlOjM0oUfO.fTqotICw/Tu2Ufa', 'admin@webfalx.com', 'Super Admin', 'active')
+(1, 'admin', '$2y$10$zN8n0cOEIHP50Q9jVC6ybO3txoMnlCGpeXGMxDAvyUHh1wyVMXwm6', 'admin@webfalx.com', 'Super Admin', 'active')
 ON DUPLICATE KEY UPDATE `username`=VALUES(`username`);
 
 -- 2. Global Configurations

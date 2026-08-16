@@ -41,10 +41,14 @@ foreach ($active_sections as $section_key) {
         // HERO SECTION
         // ==========================================
         case 'hero':
-            $hero = get_content_block('hero_section');
-            $hero_title = $hero['title'] ?? 'We Engineer High-Conversion Digital Experiences';
-            $hero_subtitle = $hero['subtitle'] ?? 'INNOVATION MEET AESTHETICS';
-            $hero_content = $hero['content'] ?? 'WebFalx is a premium agency crafting state-of-the-art web architectures, digital marketing funnels, and luxury branding for elite brands globally.';
+            $hero = get_content_block('hero_section', [
+                'title' => 'We Engineer High-Conversion Digital Experiences',
+                'subtitle' => 'INNOVATION MEET AESTHETICS',
+                'content' => 'WebFalx is a premium agency crafting state-of-the-art web architectures, digital marketing funnels, and luxury branding for elite brands globally.'
+            ]);
+            $hero_title = $hero['title'];
+            $hero_subtitle = $hero['subtitle'];
+            $hero_content = $hero['content'];
             
             // Fetch typing animation terms
             $typing_terms_raw = get_setting('hero_typing_terms', 'Local Businesses,Startups,Clinics & Doctors,E-commerce Brands,Corporate Brands');
@@ -63,7 +67,9 @@ foreach ($active_sections as $section_key) {
                             <h1 style="line-height: 1.1; margin-bottom: var(--spacing-sm); font-size: 3.5rem;">
                                 <?php echo esc($hero_title); ?> <br>
                                 <span style="font-size: 0.75em; color: var(--color-text-secondary-dark);">For </span>
-                                <span id="typing-text" class="gradient-text" data-words="<?php echo esc_attr($typing_terms_json); ?>"></span><span class="typed-cursor">|</span>
+                                <span id="typing-wrapper" style="display: inline-block; vertical-align: top; min-height: 2.4em; max-width: 100%;">
+                                    <span id="typing-text" class="gradient-text" data-words="<?php echo esc_attr($typing_terms_json); ?>" style="display: inline; white-space: normal; word-break: break-word;"></span><span class="typed-cursor">|</span>
+                                </span>
                             </h1>
                             
                             <p style="font-size: 1.15rem; margin-bottom: var(--spacing-md); max-width: 580px;">
@@ -208,7 +214,7 @@ foreach ($active_sections as $section_key) {
                     <div class="grid grid-3">
                         <div class="glass-card glow-card" style="padding: var(--spacing-md); border-radius: var(--radius-md);">
                             <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(37,99,235,0.1); border: 1px solid var(--color-primary); display: flex; align-items: center; justify-content: center; margin-bottom: var(--spacing-sm);">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"M8 14s1.5 2 4 2 4-2 4-2\"/><line x1=\"9\" x2=\"9.01\" y1=\"9\" y2=\"9\"/><line x1=\"15\" x2=\"15.01\" y1=\"9\" y2=\"9\"/></svg>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" x2="9.01" y1="9" y2="9"/><line x1="15" x2="15.01" y1="9" y2="9"/></svg>
                             </div>
                             <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-primary); letter-spacing: 1px; text-transform: uppercase;"><?php echo esc($wc1['subtitle']); ?></span>
                             <h3 style="font-size: 1.35rem; margin: 0.25rem 0 0.5rem 0;"><?php echo esc($wc1['title']); ?></h3>
@@ -226,7 +232,7 @@ foreach ($active_sections as $section_key) {
                         
                         <div class="glass-card glow-card" style="padding: var(--spacing-md); border-radius: var(--radius-md);">
                             <div style="width: 50px; height: 50px; border-radius: 50%; background: rgba(6,182,212,0.1); border: 1px solid var(--color-accent); display: flex; align-items: center; justify-content: center; margin-bottom: var(--spacing-sm);">
-                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><path d=\"M22 11.08V12a10 10 0 1 1-5.93-9.14\"/><polyline points=\"22 4 12 14.01 9 11.01\"/></svg>
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                             </div>
                             <span style="font-size: 0.75rem; font-weight: 700; color: var(--color-accent); letter-spacing: 1px; text-transform: uppercase;"><?php echo esc($wc3['subtitle']); ?></span>
                             <h3 style="font-size: 1.35rem; margin: 0.25rem 0 0.5rem 0;"><?php echo esc($wc3['title']); ?></h3>
@@ -564,10 +570,14 @@ foreach ($active_sections as $section_key) {
         // FINAL CTA SECTION
         // ==========================================
         case 'cta':
-            $cta = get_content_block('cta_section');
-            $cta_title = $cta['title'] ?? 'Ready to Scale Your Brand to the Next Level?';
-            $cta_subtitle = $cta['subtitle'] ?? 'LET\'S COLLABORATE';
-            $cta_content = $cta['content'] ?? 'Partner with WebFalx today and gain access to premium engineering, high-ROI marketing strategies, and design experiences that inspire trust and drive results.';
+            $cta = get_content_block('cta_section', [
+                'title' => 'Ready to Scale Your Brand to the Next Level?',
+                'subtitle' => "LET'S COLLABORATE",
+                'content' => 'Partner with WebFalx today and gain access to premium engineering, high-ROI marketing strategies, and design experiences that inspire trust and drive results.'
+            ]);
+            $cta_title = $cta['title'];
+            $cta_subtitle = $cta['subtitle'];
+            $cta_content = $cta['content'];
             
             // Build custom WhatsApp link
             $wa_number = APP_PHONE;

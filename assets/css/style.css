@@ -645,6 +645,39 @@ body.cursor-hover .custom-cursor-outline {
     50% { color: var(--color-accent) }
 }
 
+/* Typing animation CLS fix — reserves fixed height so the hero never reflows */
+#typing-wrapper {
+    display: inline-block;
+    vertical-align: top;
+    /* Reserve exactly 2 lines at the h1 line-height (1.1em × 2 = 2.2em + small buffer) */
+    min-height: 2.4em;
+    max-width: 100%;
+    line-height: 1.1;
+}
+
+#typing-text {
+    display: inline;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: break-word;
+}
+
+/* On tablet: h1 is slightly smaller — reduce reserved height */
+@media (max-width: 1024px) {
+    #typing-wrapper {
+        min-height: 2.4em;
+    }
+}
+
+/* On mobile: font is much smaller, one line usually fits — still reserve 2 lines to be safe */
+@media (max-width: 640px) {
+    #typing-wrapper {
+        min-height: 2.4em;
+        display: block;
+        max-width: 100%;
+    }
+}
+
 /* 11. Logos Marquee */
 .logos-slider-container {
     overflow: hidden;

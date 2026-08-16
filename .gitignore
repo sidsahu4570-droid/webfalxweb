@@ -9,3 +9,7 @@ logs/*.log
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Security: one-time setup tools (deploy manually, never commit)
+db-setup.php
+install/install.lock

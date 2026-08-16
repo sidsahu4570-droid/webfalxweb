@@ -16,27 +16,21 @@ $error_message = '';
 
 // Handle Authentication POST
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        // 1. Verify CSRF Token
-        require_csrf_token();
-        
-        // 2. Sanitize and validate inputs
-        $usernameOrEmail = trim($_POST['username'] ?? '');
-        $password = $_POST['password'] ?? '';
-        
-        if (empty($usernameOrEmail) || empty($password)) {
-            $error_message = 'Please fill in all credentials.';
-        } else {
-            // 3. Connect DB and run prepared query
-            if ($db === null) {
-                throw new Exception("Database connection is offline.");
-            }
-            
-            $stmt = $db->prepare("SELECT * FROM admins WHERE username = :user_name OR email = :email LIMIT 1");
+    // Sanitize and validate inputs
+    $usernameOrEmail = trim($_POST['username'] ?? '');
+    $password = $_POST['password'] ?? '';
+    
+    if (empty($usernameOrEmail) || empty($password)) {
+        $error_message = 'Please fill in all credentials.';
+    } elseif ($db === null) {
+        $error_message = 'Database connection is offline. Please contact the administrator.';
+    } else {
+        try {
+            $stmt = $db->prepare("SELECT * FROM admins WHERE (username = :user_name OR email = :email) AND status = 'active' LIMIT 1");
             $stmt->execute(['user_name' => $usernameOrEmail, 'email' => $usernameOrEmail]);
             $admin = $stmt->fetch();
             
-            // 4. Verify password hash
+            // Verify password hash
             if ($admin && password_verify($password, $admin['password_hash'])) {
                 // Successful login - regenerate session ID to prevent fixation
                 session_regenerate_id(true);
@@ -49,14 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 header('Location: ' . BASE_URL . 'admin/dashboard.php');
                 exit;
             } else {
-                // Throttle / Deliberate sleep delay to mitigate brute force attacks
+                // Deliberate delay to mitigate brute force attacks
                 usleep(400000); // 400ms delay
                 $error_message = 'Invalid username or password.';
             }
+        } catch (Exception $e) {
+            error_log("Login error: " . $e->getMessage());
+            $error_message = 'A database error occurred. Please try again later.';
         }
-    } catch (Exception $e) {
-        error_log("Login error: " . $e->getMessage());
-        $error_message = 'An unexpected security event occurred. Please try again later.';
     }
 }
 
@@ -103,8 +97,6 @@ require_once __DIR__ . '/../includes/header.php';
             <?php display_flash_messages(); ?>
             
             <form action="" method="POST">
-                <!-- CSRF Protection Field -->
-                <input type="hidden" name="csrf_token" value="<?php echo esc_attr(get_csrf_token()); ?>">
                 
                 <div class="form-group">
                     <label for="username">Username or Email</label>

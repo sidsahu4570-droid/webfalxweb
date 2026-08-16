@@ -125,20 +125,21 @@ if ($db !== null) {
 
 // 5. Fetch Filtered Leads List
 $leads = [];
-$search = sanitize_input($_GET['search'] ?? '');
-$status_filter = sanitize_input($_GET['status'] ?? '');
-$priority_filter = sanitize_input($_GET['priority'] ?? '');
+$search         = sanitize_input($_GET['search']    ?? '');
+$status_filter  = sanitize_input($_GET['status']    ?? '');
+$priority_filter= sanitize_input($_GET['priority']  ?? '');
+$lead_type_filter = sanitize_input($_GET['lead_type'] ?? ''); // 'inquiry' | 'quote' | ''
 
 if ($db !== null) {
     try {
         $query_str = "SELECT * FROM leads WHERE 1 = 1";
         $params = [];
-        
+
         if (!empty($search)) {
             $query_str .= " AND (full_name LIKE :search OR email LIKE :search OR phone LIKE :search OR company_name LIKE :search OR lead_id LIKE :search)";
             $params['search'] = '%' . $search . '%';
         }
-        
+
         if (!empty($status_filter)) {
             $query_str .= " AND status = :status";
             $params['status'] = $status_filter;
@@ -147,6 +148,11 @@ if ($db !== null) {
         if (!empty($priority_filter)) {
             $query_str .= " AND priority = :priority";
             $params['priority'] = $priority_filter;
+        }
+
+        if (!empty($lead_type_filter)) {
+            $query_str .= " AND lead_type = :lead_type";
+            $params['lead_type'] = $lead_type_filter; // exact match: 'inquiry' or 'quote'
         }
         
         $query_str .= " ORDER BY id DESC";
@@ -209,6 +215,12 @@ require_once __DIR__ . '/admin_header.php';
                 <option value="High" <?php echo $priority_filter == 'High' ? 'selected' : ''; ?>>High</option>
             </select>
 
+            <select name="lead_type" class="form-control" style="width: 155px; background: var(--color-bg-dark); cursor: pointer; min-height: auto;">
+                <option value="">All Lead Types</option>
+                <option value="inquiry" <?php echo $lead_type_filter === 'inquiry' ? 'selected' : ''; ?>>💬 General Inquiry</option>
+                <option value="quote"   <?php echo $lead_type_filter === 'quote'   ? 'selected' : ''; ?>>📋 Request Estimate</option>
+            </select>
+
             <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1.25rem; font-size: 0.85rem; border-radius: var(--radius-sm); min-height: auto;">Filter</button>
         </div>
 
@@ -260,6 +272,26 @@ require_once __DIR__ . '/admin_header.php';
 
                             <!-- Column 3 -->
                             <td style="font-size: 0.82rem; max-width: 250px;">
+                                <?php
+                                    // Resolve lead_type value to a human-readable label + color
+                                    $raw_type = strtolower(trim($item['lead_type'] ?? 'inquiry'));
+                                    if ($raw_type === 'quote') {
+                                        $type_label = 'Request Estimate';
+                                        $type_bg    = 'rgba(124,58,237,0.18)';
+                                        $type_border = 'rgba(124,58,237,0.5)';
+                                        $type_color = '#a78bfa';
+                                        $type_icon  = '📋';
+                                    } else {
+                                        $type_label = 'General Inquiry';
+                                        $type_bg    = 'rgba(6,182,212,0.12)';
+                                        $type_border = 'rgba(6,182,212,0.4)';
+                                        $type_color = '#22d3ee';
+                                        $type_icon  = '💬';
+                                    }
+                                ?>
+                                <span style="display: inline-block; background: <?php echo $type_bg; ?>; border: 1px solid <?php echo $type_border; ?>; color: <?php echo $type_color; ?>; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; padding: 2px 8px; border-radius: 20px; margin-bottom: 6px;">
+                                    <?php echo $type_icon; ?> <?php echo $type_label; ?>
+                                </span>
                                 <div style="font-weight: 600; color: #ffffff;">Service: <?php echo esc($item['service_interested'] ?: 'General Inquiry'); ?></div>
                                 <div style="font-size: 0.75rem; color: var(--color-text-muted-dark);">Budget: <?php echo esc($item['budget'] ?: 'Not specified'); ?> | Deadline: <?php echo esc($item['deadline'] ?: 'N/A'); ?></div>
                                 <p style="margin-top: 4px; line-height: 1.3; color: var(--color-text-secondary-dark);"><?php echo esc($item['message']); ?></p>

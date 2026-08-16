@@ -46,8 +46,8 @@ $seo = get_seo_data($page_seo ?? []);
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/animations.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/style.css?v=1.0.2">
+    <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/animations.css?v=1.0.2">
     
     <!-- Dynamic Theme Styling variables injection (Prompt 8) -->
     <style>
@@ -71,6 +71,23 @@ $seo = get_seo_data($page_seo ?? []);
         <?php echo $schemaJson; // Output raw schema json since it is controlled database admin content ?>
     </script>
     <?php endif; ?>
+    <!-- Meta Pixel Code -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1351725287090825');
+    fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=1351725287090825&ev=PageView&noscript=1"
+    alt="Meta Pixel" /></noscript>
+    <!-- End Meta Pixel Code -->
 </head>
 <body>
 

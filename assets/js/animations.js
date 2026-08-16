@@ -34,15 +34,17 @@ function initGsapAnimations() {
         delay: 0.5
     });
 
-    // Hero content reveal animations
-    gsap.from('.hero-reveal', {
-        y: 60,
-        opacity: 0,
-        duration: 1.4,
-        stagger: 0.2,
-        ease: 'power4.out',
-        delay: 0.8
-    });
+    // Hero content reveal animations (only on pages that have a hero section)
+    if (document.querySelector('.hero-reveal')) {
+        gsap.from('.hero-reveal', {
+            y: 60,
+            opacity: 0,
+            duration: 1.4,
+            stagger: 0.2,
+            ease: 'power4.out',
+            delay: 0.8
+        });
+    }
 
     // Pages use the native reveal classes for their content.  Previously these
     // stayed hidden whenever GSAP was available because the observer fallback

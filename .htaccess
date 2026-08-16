@@ -1,0 +1,65 @@
+# WebFalx Apache Configuration
+# ============================================================
+
+Options -Indexes
+ServerSignature Off
+
+# ─── PHP Settings ────────────────────────────────────────────
+<IfModule mod_php.c>
+    php_flag display_errors Off
+    php_value upload_max_filesize 10M
+    php_value post_max_size 12M
+    php_value max_execution_time 60
+    php_value memory_limit 256M
+</IfModule>
+
+# ─── Rewrite Engine ──────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # Dedicated Meta Ads Offer landing page routing
+    RewriteRule ^offer/?$ offer.php [QSA,L]
+
+    # Pass all query string parameters through unchanged
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+# ─── Security Headers ────────────────────────────────────────
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ─── Protect sensitive directories ───────────────────────────
+<FilesMatch "^(config|functions|header|footer)\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block access to logs directory
+<IfModule mod_rewrite.c>
+    RewriteRule ^logs/ - [F,L]
+    RewriteRule ^database/ - [F,L]
+</IfModule>
+
+# ─── Browser Caching ─────────────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType image/png "access plus 6 months"
+    ExpiresByType image/jpeg "access plus 6 months"
+    ExpiresByType image/webp "access plus 6 months"
+    ExpiresByType image/svg+xml "access plus 6 months"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# ─── GZIP Compression ────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json text/xml
+</IfModule>
