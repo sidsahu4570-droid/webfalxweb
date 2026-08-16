@@ -96,16 +96,6 @@ if ($flash_success) {
     $success_message = $flash_success['message'];
 }
 
-// Fetch 3 genuine portfolio project thumbnails from database
-$portfolio_projects = [];
-if ($db !== null) {
-    try {
-        $stmt = $db->query("SELECT title, thumbnail_url, website_url FROM portfolio_projects WHERE is_active = 1 ORDER BY is_featured DESC, display_order ASC LIMIT 3");
-        $portfolio_projects = $stmt->fetchAll();
-    } catch (PDOException $e) {
-        // Fallback silently if table not populated
-    }
-}
 
 // Page SEO Metadata
 $page_seo = [
@@ -459,7 +449,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <!-- 4 Compact Benefit Badges -->
-        <div class="grid grid-4" style="gap: 1rem; margin-bottom: 2rem;">
+        <div class="grid grid-4" style="gap: 1rem;">
             <div class="trust-mini-card">
                 <div style="font-size: 1.4rem; margin-bottom: 4px;">⚡</div>
                 <strong style="color: #fff; font-size: 0.95rem; display: block;">7-Day Launch</strong>
@@ -481,24 +471,6 @@ require_once __DIR__ . '/includes/header.php';
                 <span style="font-size: 0.8rem; color: var(--color-text-secondary-dark);">Full assistance after launch.</span>
             </div>
         </div>
-
-        <!-- 3 Small Genuine Portfolio Project Previews -->
-        <?php if (!empty($portfolio_projects)): ?>
-            <div class="grid grid-3" style="gap: 1rem;">
-                <?php foreach ($portfolio_projects as $proj): ?>
-                    <div style="background: #1e293b; border-radius: var(--radius-sm); overflow: hidden; border: 1px solid rgba(255,255,255,0.08);">
-                        <?php if (!empty($proj['thumbnail_url'])): ?>
-                            <img src="<?php echo esc_url($proj['thumbnail_url']); ?>" alt="<?php echo esc_attr($proj['title']); ?>" style="width: 100%; height: 130px; object-fit: cover;" loading="lazy">
-                        <?php else: ?>
-                            <div style="height: 110px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; color: #94a3b8;">Client Project</div>
-                        <?php endif; ?>
-                        <div style="padding: 10px 14px; font-size: 0.85rem; font-weight: 700; color: #fff;">
-                            <?php echo esc($proj['title']); ?>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
     </div>
 </section>
 
