@@ -19,7 +19,8 @@ ServerSignature Off
     RewriteBase /
 
     # Dedicated Meta Ads Offer landing page routing
-    RewriteRule ^offer/?$ offer.php [QSA,L]
+    RewriteRule ^realestateoffer/?$ realestateoffer.php [QSA,L]
+    RewriteRule ^offer/?$ realestateoffer.php [QSA,L]
 
     # Pass all query string parameters through unchanged
     RewriteCond %{REQUEST_FILENAME} !-f
